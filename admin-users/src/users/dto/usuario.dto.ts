@@ -17,6 +17,7 @@ export class UsuarioDto {
     @IsEnum(RolUsuario)
     rol: RolUsuario;
 
+    @IsOptional()
     @IsNumber()
     dni: number;
 

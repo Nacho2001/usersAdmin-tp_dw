@@ -5,6 +5,8 @@ import { UsuarioDto } from '../dto/usuario.dto';
 
 @Injectable()
 export class AuthService {
+    constructor(private jwtService: JwtService){}
+    
     /** Reciba la contraseña original y la retorna encriptada */
     async hashPassword(password: string): Promise<string>{
         return bcrypt.hash(password, 12);
@@ -20,7 +22,6 @@ export class AuthService {
         return bcrypt.compare(password, hashPassword);
     }
 
-    constructor(private jwtService: JwtService){}
     async verifyJwt(jwt: string): Promise<any>{
         return await this.jwtService.verifyAsync(jwt);
     };

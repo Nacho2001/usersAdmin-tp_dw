@@ -10,8 +10,8 @@ import { db } from './config';
 
 @Module({
   imports: [TypeOrmModule.forRoot(db), UsersModule],
-  controllers: [AppController],
-  providers: [AppService, AuthService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer){
