@@ -4,7 +4,7 @@ import { UsuarioDto } from './dto/usuario.dto';
 import { response, Response } from 'express';
 import { AuthService } from './auth/auth.service';
 
-@Controller('users')
+@Controller('usuarios')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService, 
@@ -24,19 +24,15 @@ export class UsersController {
   /** Recibe los datos del usuario y retorna un token si son correctos */
   @Post('login')
   async login(@Body() usuario: UsuarioDto, @Res() response: Response){
-    const nombre = usuario.nombre;
-    const password = usuario.password;
-    /** Obtiene la clave del usuario ingresado */
-    const claveRegistrada = await this.usersService.getPassword(nombre);
-    /** Si obtuvo la contraseña de la base de datos, realiza el hash y compara las claves */
-    if(claveRegistrada){
-      /** Encripta la clave ingresada */
-      const hashedPassword = await this.authService.hashPassword(password);
+    /** Obtiene la clave del usuario ingresado, busca primero el usuario en BD */
+    const usuarioRegistrado = await this.usersService.getUser(usuario);
+    /** Si obtuvo la contraseña de la base de datos, compara las claves */
+    if(usuarioRegistrado){
       /** Llama una función para comparar las contraseñas */
-      const result = this.authService.comparePassword(hashedPassword, claveRegistrada);
+      const result = await this.authService.comparePassword(usuario.password, usuarioRegistrado.password);
       if(result){
         /** Si las claves coinciden, devuelve un token  */
-        const token = this.authService.generateToken(usuario);
+        const token = await this.authService.generateToken(usuarioRegistrado);
         response
         .status(HttpStatus.OK)
         .json({ ok: true, message: "Inicio de sesion exitoso!", token: token});
@@ -56,7 +52,7 @@ export class UsersController {
 
   /** Recibe una petición Get y obtiene todos los usuarios */
   @Get()
-  async findAll() {
+  async findAll(@Res() response: Response) {
     const result = await this.usersService.findAll();
     response
       .status(HttpStatus.OK)
@@ -65,7 +61,7 @@ export class UsersController {
 
   /** Recibe un Get y un id. Luego envia el usuario solicitado*/
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string, @Res() response: Response) {
     const result = await this.usersService.findByID(+id);
     response
       .status(HttpStatus.OK)
@@ -76,7 +72,7 @@ export class UsersController {
    * del usuario con los que envióen el Body
    */
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() usuario: UsuarioDto) {
+  async update(@Param('id') id: number, @Body() usuario: UsuarioDto, @Res() response: Response) {
     const result = await this.usersService.update(+id, usuario);
     response
       .status(HttpStatus.OK)
@@ -85,7 +81,7 @@ export class UsersController {
 
   /** Recibe un Delete con el id y elimina el usuario indicado */
   @Delete(':id')
-  async remove(@Param('id') id: string) {
+  async remove(@Param('id') id: number, @Res() response: Response) {
     const result =  await this.usersService.remove(+id);
     response
       .status(HttpStatus.OK)

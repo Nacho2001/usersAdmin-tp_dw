@@ -29,7 +29,7 @@ export class AuthService {
     async generateToken(user: UsuarioDto): Promise<string>{
         const payload = {
             sub: user.id,
-            email: user.email,
+            password: user.password,
             nombre: user.nombre
         };
         return this.jwtService.signAsync(payload);

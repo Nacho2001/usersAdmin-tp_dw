@@ -9,26 +9,26 @@ export class Usuarios {
     id: number;
 
     // Nombre de usuario
-    @Column({ type: 'string', nullable: false, length: 255, unique: true })
+    @Column({ type: 'varchar', nullable: false, length: 255, unique: true })
     nombre: string;
 
     // Contraseña
-    @Column({ type: 'string', nullable: false, length: 255 })
+    @Column({ type: 'varchar', nullable: false, length: 255 })
     password: string;
 
     // Email
-    @Column({ type:'string', nullable: true, length: 255, unique: true})
+    @Column({ type: 'varchar', nullable: true, length: 255, unique: true})
     email: string;
 
     // dni
-    @Column({ type: 'int', nullable: true, length: 10})
+    @Column({ type: 'int', nullable: true })
     dni: number;
 
     // rol de usuario, por defecto, es cliente
-    @Column({ type: 'string', default: 'cliente', length: 255})
+    @Column({ type: 'varchar', default: 'Cliente', length: 255})
     rol: string;
 
     // Activo ?
-    @Column({ type: 'bool', default: true})
+    @Column({ type: 'bool', default: true })
     activo: boolean;
 }

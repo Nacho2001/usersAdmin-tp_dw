@@ -1,8 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
-import { AuthService } from './users/auth/auth.service';
 import { JwtMiddleware } from './users/middlewares/jwt/jwt.middleware';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { db } from './config';

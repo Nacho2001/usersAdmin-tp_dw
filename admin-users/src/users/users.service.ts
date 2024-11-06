@@ -1,15 +1,17 @@
-import { HttpException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { UsuarioDto } from './dto/usuario.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
 import { Usuarios } from './entities/user.entity';
 import checkNulls from './checkNulls';
+import { AuthService } from './auth/auth.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     /** Injecta entidad Usuarios (referencia a la tabla en la base) */
-    @InjectRepository(Usuarios) private readonly repo: Repository<UsuarioDto>
+    @InjectRepository(Usuarios) private readonly repo: Repository<UsuarioDto>,
+    private readonly authService: AuthService,
   ){}
 
   /** Carga el usuario recibido a la base de datos*/
@@ -18,6 +20,8 @@ export class UsersService {
       /** Llama a la función para revisar campos obligatorios */
       checkNulls(user);
       /** Encripta la contraseña  */
+      const hashedPassword = await this.authService.hashPassword(user.password);
+      user.password = hashedPassword;
       /** Ejecuta función save para guardar los datos en la base */
       const result = await this.repo.save(user);
       /** Retorna la respuesta de la consulta */
@@ -45,12 +49,16 @@ export class UsersService {
     }
   }
 
-  /** Recibe nombre de usuario, si encuentra una coincidencia en la base, retorna true */
-  async getPassword(nombre: string){
+  /** Recibe nombre de usuario, si encuentra una coincidencia en la base, 
+   * retorna el usuario con los datos guardados de la base */
+  async getUser(usuario: UsuarioDto){
+    // Declara nombre para realizar busqueda en BD
+    const nombre = usuario.nombre;
+    /** Realiza la busqueda del usuario por nombre  */
     try {
-      const result = await this.repo.findOne({ where: {nombre}});
+      const result = await this.repo.findOne({ where: {nombre} });
       if (result) {
-        return result.password;
+        return result;
       } else {
         return null;
       }
@@ -65,7 +73,7 @@ export class UsersService {
   /** Recibe un id y obtiene el usuario correspondiente */
   async findByID(id: number): Promise<UsuarioDto> {
     try {
-      /** Realiza la busqueda por id */
+      /** Realiza la busqueda por username */
       const usuario = await this.repo.findOne({ where: {id} });
       /** Retorna usuario encontrado */
       if(!usuario) throw new NotFoundException("No se encontró el usuario solicitado");

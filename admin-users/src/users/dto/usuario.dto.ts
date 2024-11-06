@@ -14,6 +14,7 @@ export class UsuarioDto {
     @IsString()
     email: string;
 
+    @IsOptional()
     @IsEnum(RolUsuario)
     rol: RolUsuario;
 
@@ -21,6 +22,7 @@ export class UsuarioDto {
     @IsNumber()
     dni: number;
 
+    @IsOptional()
     @IsBoolean()
     activo: boolean;
 

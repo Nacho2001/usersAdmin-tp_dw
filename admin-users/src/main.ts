@@ -6,7 +6,7 @@ import { envs } from './config';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('');
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(envs.port);
 }
