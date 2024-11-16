@@ -89,6 +89,8 @@ export class UsersService {
   /** Recibe un id y un objeto con datos de usuario y actualiza los datos de usuario correspondiente al id*/
   async update(id: number, usuario: UsuarioDto){
     try {
+      /** Encripta la contraseña nueva ingresada */
+      usuario.password = await this.authService.hashPassword(usuario.password);
       /** Pasa el id del usuario y los datos nuevos al metodo id para actualizar los datos */
       const actualizacion = await this.repo.update(id, usuario);
       return actualizacion;

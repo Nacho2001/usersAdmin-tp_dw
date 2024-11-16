@@ -15,7 +15,7 @@ export class UsuarioDto {
     email: string;
 
     @IsOptional()
-    @IsEnum(RolUsuario)
+    //@IsEnum(RolUsuario)
     rol: RolUsuario;
 
     @IsOptional()
