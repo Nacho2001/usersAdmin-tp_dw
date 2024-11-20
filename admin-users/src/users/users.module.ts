@@ -7,10 +7,12 @@ import { AuthService } from 'src/users/auth/auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { envs } from 'src/config';
 import { JwtStrategy } from 'src/strategies/jwtStrategy';
+import { Reservas } from './entities/reservas.entity';
+import { Propiedades } from './entities/propiedades.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Usuarios]),
+    TypeOrmModule.forFeature([Usuarios, Reservas, Propiedades]),
     JwtModule.register({
       secret: envs.jwt,
       signOptions: {

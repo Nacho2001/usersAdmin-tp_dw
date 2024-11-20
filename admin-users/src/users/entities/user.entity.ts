@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Reservas } from "./reservas.entity";
 
 /* Declara entidad usuario */
 @Entity('usuarios')
@@ -31,4 +32,9 @@ export class Usuarios {
     // Activo ?
     @Column({ type: 'bool', default: true })
     activo: boolean;
+
+    // Reservas de usuario
+    @OneToMany(() => Reservas, (reservas) => reservas.usuario)
+    @JoinColumn({ name: 'reservas'})
+    reservas: Reservas[];
 }

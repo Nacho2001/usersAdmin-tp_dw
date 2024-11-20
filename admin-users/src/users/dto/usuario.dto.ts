@@ -1,5 +1,6 @@
-import { IsBoolean, IsEnum, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsArray, IsBoolean, IsEnum, IsNumber, IsOptional, IsString } from "class-validator";
 import { RolUsuario } from "../enums/roles.enum";
+import { ReservaDto } from "./reservas.dto";
 
 export class UsuarioDto {
     id:number;
@@ -15,7 +16,7 @@ export class UsuarioDto {
     email: string;
 
     @IsOptional()
-    //@IsEnum(RolUsuario)
+    @IsEnum(RolUsuario)
     rol: RolUsuario;
 
     @IsOptional()
@@ -25,5 +26,9 @@ export class UsuarioDto {
     @IsOptional()
     @IsBoolean()
     activo: boolean;
+
+    @IsOptional()
+    @IsArray()
+    reservas: ReservaDto[];
 
 }
