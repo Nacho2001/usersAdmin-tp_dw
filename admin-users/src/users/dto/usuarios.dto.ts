@@ -27,8 +27,7 @@ export class UsuarioDto {
     @IsBoolean()
     activo: boolean;
 
-    @IsOptional()
     @IsArray()
     reservas: ReservaDto[];
-
+    
 }

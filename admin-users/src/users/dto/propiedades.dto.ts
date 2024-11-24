@@ -1,4 +1,4 @@
-import { IsArray, IsEnum, IsNumber, IsString } from "class-validator";
+import { IsArray, IsEnum, IsNumber, IsOptional, IsString } from "class-validator";
 import { TipoPropiedad } from "../enums/tipos.enum";
 import { ReservaDto } from "./reservas.dto";
 
@@ -19,6 +19,7 @@ export class PropiedadDto {
     @IsNumber()
     precio: number;
 
+    @IsOptional()
     @IsArray()
     reservas: ReservaDto[];
 }

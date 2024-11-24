@@ -18,11 +18,11 @@ export class Usuarios {
     password: string;
 
     // Email
-    @Column({ type: 'varchar', nullable: true, length: 255, unique: true})
+    @Column({ type:'varchar', nullable: true, length: 255})
     email: string;
 
     // dni
-    @Column({ type: 'int', nullable: true })
+    @Column({ type: 'int', nullable: true})
     dni: number;
 
     // rol de usuario, por defecto, es cliente
@@ -30,11 +30,13 @@ export class Usuarios {
     rol: string;
 
     // Activo ?
-    @Column({ type: 'bool', default: true })
+    @Column({ type: 'bool', default: true})
     activo: boolean;
 
+    
     // Reservas de usuario
     @OneToMany(() => Reservas, (reservas) => reservas.usuario)
     @JoinColumn({ name: 'reservas'})
     reservas: Reservas[];
+    
 }
